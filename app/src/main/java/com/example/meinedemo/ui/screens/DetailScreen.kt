@@ -15,44 +15,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 
+
 @Composable
 fun DetailScreen(senderText: String, navHostController: NavHostController) {
+    val textItems = listOf(
+        TextItem("Oben Anfang", Alignment.Start, true),
+        TextItem("Oben Mitte", Alignment.CenterHorizontally, true),
+        TextItem("Mitte Ende", Alignment.End, true),
+        TextItem("Unten Mitte", Alignment.CenterHorizontally, true),
+        TextItem("Unten Anfang", Alignment.Start, false)
+    )
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
-
     ) {
-        // Texte gleichmäßig verteilen
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .align(Alignment.Start),
-            text = "Oben Anfang"
-        )
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .align(Alignment.CenterHorizontally),
-            text = "Oben Mitte"
-        )
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .align(Alignment.End),
-            text = "Mitte Ende"
-        )
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .align(Alignment.CenterHorizontally),
-            text = "Unten Mitte"
-        )
-        Text(
-            modifier = Modifier
-                .align(Alignment.Start),
-            text = "Unten Anfang"
-        )
-
+        textItems.forEach { item ->
+            Text(
+                modifier = Modifier
+                    .then(
+                        if (item.hasWeight)
+                            Modifier.weight(1f)
+                        else
+                            Modifier)
+                    .align(item.alignment),
+                text = item.text
+            )
+        }
 
         Row(
             modifier = Modifier

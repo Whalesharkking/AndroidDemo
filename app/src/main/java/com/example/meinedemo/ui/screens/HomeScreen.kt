@@ -17,9 +17,10 @@ import com.example.meinedemo.navigation.DemoApplicationScreens
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
     Text(
-        text = "Welcome to the HomeScreen",
+        text = "Welcome to the HomeScreen!!!",
         color = MaterialTheme.colorScheme.primary,
-        style = MaterialTheme.typography.titleLarge,
+        style = MaterialTheme.typography.headlineMedium,
+        modifier = Modifier.padding(start = 10.dp)
     )
     Box(
         modifier = Modifier.fillMaxSize(),
