@@ -15,7 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.example.meinedemo.navigation.DemoApplicationScreens
+import com.example.meinedemo.navigation.DemoApplicationScreen
 
 @Composable
 fun InfoScreen(senderText: String, items: String, navHostController: NavHostController) {
@@ -28,7 +28,7 @@ fun InfoScreen(senderText: String, items: String, navHostController: NavHostCont
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = { navHostController.navigate(DemoApplicationScreens.Home.name) }) {
+            Button(onClick = { navHostController.navigate(DemoApplicationScreen.Home.name) }) {
                 Text(text = "To HomeScreen")
             }
 

@@ -4,15 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -20,7 +16,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.meinedemo.navigation.DemoApplicationScreens
+import com.example.meinedemo.navigation.DemoApplicationScreen
+import com.example.meinedemo.ui.bands.BandsViewModel
+import com.example.meinedemo.ui.screens.BandInfoScreen
 import com.example.meinedemo.ui.screens.DetailScreen
 import com.example.meinedemo.ui.screens.HomeScreen
 import com.example.meinedemo.ui.screens.InfoScreen
@@ -36,7 +34,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     DemoNavHost(
                         navController = navController,
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
                     )
                 }
             }
@@ -45,18 +43,21 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun DemoNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
+fun DemoNavHost(
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
     NavHost(
         navController = navController,
-        startDestination = DemoApplicationScreens.Home.name,
+        startDestination = DemoApplicationScreen.Home.name,
         modifier = modifier
     ) {
-        composable(route = DemoApplicationScreens.Home.name) {
-            HomeScreen(navController)
+        composable(route = DemoApplicationScreen.Home.name) {
+            HomeScreen(navController, BandsViewModel())
         }
 
         composable(
-            route = "${DemoApplicationScreens.Detail.name}/{senderText}",
+            route = "${DemoApplicationScreen.Detail.name}/{senderText}",
             arguments = listOf(navArgument("senderText") { type = NavType.StringType })
         ) { backStackEntry ->
             val senderText = backStackEntry.arguments?.getString("senderText") ?: "error"
@@ -64,7 +65,7 @@ fun DemoNavHost(navController: NavHostController, modifier: Modifier = Modifier)
         }
 
         composable(
-            route = "${DemoApplicationScreens.Info.name}/{senderText}/{items}",
+            route = "${DemoApplicationScreen.Info.name}/{senderText}/{items}",
             arguments = listOf(
                 navArgument("senderText") { type = NavType.StringType },
                 navArgument("items") { type = NavType.StringType }
@@ -73,6 +74,18 @@ fun DemoNavHost(navController: NavHostController, modifier: Modifier = Modifier)
             val senderText = backStackEntry.arguments?.getString("senderText") ?: "error"
             val items = backStackEntry.arguments?.getString("items") ?: "error"
             InfoScreen(senderText, items, navController)
+        }
+        composable(
+            route = "${DemoApplicationScreen.BandInfo.name}/{bandCode}",
+            arguments = listOf(navArgument("bandCode") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val bandCode = backStackEntry.arguments?.getString("bandCode") ?: "unknown"
+            val viewModel = BandsViewModel()
+            viewModel.requestBandInfoFromServer(bandCode)
+            val bandInfoState = viewModel.currentBand.collectAsState(initial = null)
+            bandInfoState.value?.let { bandInfo ->
+                BandInfoScreen(bandInfo, navController)
+            }
         }
     }
 }

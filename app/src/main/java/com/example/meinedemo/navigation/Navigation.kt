@@ -1,7 +1,9 @@
 package com.example.meinedemo.navigation
 
-enum class DemoApplicationScreens {
+enum class DemoApplicationScreen {
     Home,
     Detail,
     Info,
+    BandInfo;
+
 }
