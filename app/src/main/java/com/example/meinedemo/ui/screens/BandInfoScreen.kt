@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil3.compose.AsyncImage
-import com.example.meinedemo.ui.bands.BandInfo
+import com.example.meinedemo.bands.BandInfo
 
 @Composable
 fun BandInfoScreen(

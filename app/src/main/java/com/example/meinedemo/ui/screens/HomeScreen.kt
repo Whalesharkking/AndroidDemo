@@ -17,8 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.meinedemo.bands.BandsViewModel
+import com.example.meinedemo.electronics.ElectronicsViewModel
 import com.example.meinedemo.navigation.DemoApplicationScreen
-import com.example.meinedemo.ui.bands.BandsViewModel
 
 @Composable
 fun HomeScreen(navHostController: NavHostController, bandsViewModel: BandsViewModel) {
@@ -71,7 +72,29 @@ fun HomeScreen(navHostController: NavHostController, bandsViewModel: BandsViewMo
                         )
                     }
                 }
+                val electronicsViewModel = ElectronicsViewModel()
+                Button(onClick = {
+                    electronicsViewModel.requestElectronicsFromServer()
+                }) {
+                    Text(text = "Load Bands")
+                }
+                val electronics = electronicsViewModel.electronicsFlow.collectAsState()
 
+                LazyColumn {
+                    items(electronics.value) { electronics ->  // Hier die richtige Funktion nutzen
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .clickable {
+                                    navHostController.navigate(
+                                        route = "${DemoApplicationScreen.BandInfo.name}/${electronics.name}"
+                                    )
+                                },
+                            text = electronics.name
+                        )
+                    }
+                }
             }
         }
     }
