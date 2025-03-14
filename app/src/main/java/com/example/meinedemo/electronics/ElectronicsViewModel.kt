@@ -40,9 +40,9 @@ class ElectronicsViewModel : ViewModel() {
         }
     }
 
-    fun requestDetailsOfElectronic(code: String) {
+    fun requestDetailsOfElectronic(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = electronicsService.getElectronicInfo(code)
+            val response = electronicsService.getElectronicInfo(id)
             if (response.code() == HttpURLConnection.HTTP_OK) {
                 _currentElectronic.emit(response.body())
             }

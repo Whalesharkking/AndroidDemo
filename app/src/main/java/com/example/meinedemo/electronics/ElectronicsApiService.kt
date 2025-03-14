@@ -9,8 +9,8 @@ interface ElectronicsApiService {
     @GET("objects")
     suspend fun getElectronics(): Response<List<Electronic>>
 
-    @GET("objects/{code}")
-    suspend fun getElectronicInfo(@retrofit2.http.Path("code") code: String): Response<Electronic>
+    @GET("objects/{id}")
+    suspend fun getElectronicInfo(@retrofit2.http.Path("id") id: String): Response<Electronic>
 }
 
 @Serializable

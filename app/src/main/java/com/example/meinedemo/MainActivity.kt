@@ -90,13 +90,13 @@ fun DemoNavHost(
             }
         }
         composable(
-            route = "${DemoApplicationScreen.ElectronicInfo.name}/{electronicsCode}",
-            arguments = listOf(navArgument("electronicsCode") { type = NavType.StringType })
+            route = "${DemoApplicationScreen.ElectronicInfo.name}/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.StringType })
         ) { backStackEntry ->
-            val electronicsCode =
-                backStackEntry.arguments?.getString("electronicsCode") ?: "unknown"
+            val electronicId =
+                backStackEntry.arguments?.getString("id") ?: "unknown"
             val viewModel = ElectronicsViewModel()
-            viewModel.requestDetailsOfElectronic(electronicsCode)
+            viewModel.requestDetailsOfElectronic(electronicId)
             val electronicInfoState = viewModel.currentElectronic.collectAsState(initial = null)
             electronicInfoState.value?.let { electronicInfo ->
                 ElectronicInfoScreen(electronicInfo, navController)
