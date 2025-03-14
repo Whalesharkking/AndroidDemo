@@ -2,7 +2,6 @@ package com.example.meinedemo.electronics
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.meinedemo.bands.BandInfo
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -24,12 +23,12 @@ class ElectronicsViewModel : ViewModel() {
 
     private val _electronicsFlow: MutableStateFlow<List<Electronic>> = MutableStateFlow(emptyList())
     val electronicsFlow: StateFlow<List<Electronic>> = _electronicsFlow
-    private val _currentElectronic: MutableSharedFlow<BandInfo?> = MutableSharedFlow()
-    val currentElectronic: Flow<BandInfo?> = _currentElectronic
+    private val _currentElectronic: MutableSharedFlow<Electronic?> = MutableSharedFlow()
+    val currentElectronic: Flow<Electronic?> = _currentElectronic
     private val retrofit = Retrofit.Builder()
         .client(OkHttpClient().newBuilder().build())
         .addConverterFactory(Json.asConverterFactory(contentType))
-        .baseUrl("https://restful-api.dev/")
+        .baseUrl("https://api.restful-api.dev/")
         .build()
     private val electronicsService = retrofit.create(ElectronicsApiService::class.java)
     fun requestElectronicsFromServer() {
@@ -37,6 +36,15 @@ class ElectronicsViewModel : ViewModel() {
             val electronics = getElectronicsFromServer()
             electronics?.let {
                 _electronicsFlow.emit(electronics)
+            }
+        }
+    }
+
+    fun requestDetailsOfElectronic(code: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = electronicsService.getElectronicInfo(code)
+            if (response.code() == HttpURLConnection.HTTP_OK) {
+                _currentElectronic.emit(response.body())
             }
         }
     }

@@ -6,8 +6,11 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface ElectronicsApiService {
-    @GET("all.json")
+    @GET("objects")
     suspend fun getElectronics(): Response<List<Electronic>>
+
+    @GET("objects/{code}")
+    suspend fun getElectronicInfo(@retrofit2.http.Path("code") code: String): Response<Electronic>
 }
 
 @Serializable

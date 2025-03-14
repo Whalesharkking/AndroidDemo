@@ -22,7 +22,11 @@ import com.example.meinedemo.electronics.ElectronicsViewModel
 import com.example.meinedemo.navigation.DemoApplicationScreen
 
 @Composable
-fun HomeScreen(navHostController: NavHostController, bandsViewModel: BandsViewModel) {
+fun HomeScreen(
+    navHostController: NavHostController,
+    bandsViewModel: BandsViewModel,
+    electronicsViewModel: ElectronicsViewModel
+) {
 
     Column {
         Text(
@@ -72,11 +76,10 @@ fun HomeScreen(navHostController: NavHostController, bandsViewModel: BandsViewMo
                         )
                     }
                 }
-                val electronicsViewModel = ElectronicsViewModel()
                 Button(onClick = {
                     electronicsViewModel.requestElectronicsFromServer()
                 }) {
-                    Text(text = "Load Bands")
+                    Text(text = "Load Electronics")
                 }
                 val electronics = electronicsViewModel.electronicsFlow.collectAsState()
 
@@ -88,7 +91,7 @@ fun HomeScreen(navHostController: NavHostController, bandsViewModel: BandsViewMo
                                 .padding(8.dp)
                                 .clickable {
                                     navHostController.navigate(
-                                        route = "${DemoApplicationScreen.BandInfo.name}/${electronics.name}"
+                                        route = "${DemoApplicationScreen.ElectronicInfo.name}/${electronics.id}"
                                     )
                                 },
                             text = electronics.name

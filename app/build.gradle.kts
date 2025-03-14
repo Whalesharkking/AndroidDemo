@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network)
     implementation(libs.android.kotlinx.serialization)
+    implementation(libs.kotlin.reflect)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
