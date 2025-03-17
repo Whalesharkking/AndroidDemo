@@ -24,6 +24,7 @@ import com.example.meinedemo.ui.screens.DetailScreen
 import com.example.meinedemo.ui.screens.ElectronicInfoScreen
 import com.example.meinedemo.ui.screens.HomeScreen
 import com.example.meinedemo.ui.screens.InfoScreen
+import com.example.meinedemo.ui.screens.UserScreen
 import com.example.meinedemo.ui.theme.MeineDemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -102,5 +103,10 @@ fun DemoNavHost(
                 ElectronicInfoScreen(electronicInfo, navController)
             }
         }
+        composable(route = DemoApplicationScreen.User.name) {
+            UserScreen()
+        }
     }
 }
+
+

@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.coil.network)
     implementation(libs.android.kotlinx.serialization)
     implementation(libs.kotlin.reflect)
+    implementation(libs.androidx.data.store.preferences)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

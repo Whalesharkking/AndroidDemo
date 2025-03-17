@@ -98,6 +98,11 @@ fun HomeScreen(
                         )
                     }
                 }
+                Button(onClick = {
+                    navHostController.navigate(DemoApplicationScreen.User.name)
+                }) {
+                    Text(text = "To UserScreen")
+                }
             }
         }
     }
