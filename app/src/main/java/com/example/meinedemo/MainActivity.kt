@@ -16,15 +16,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.meinedemo.bands.BandsViewModel
-import com.example.meinedemo.electronics.ElectronicsViewModel
+import com.example.meinedemo.ui.bands.BandsViewModel
+import com.example.meinedemo.ui.electronics.ElectronicsViewModel
 import com.example.meinedemo.navigation.DemoApplicationScreen
-import com.example.meinedemo.ui.screens.BandInfoScreen
-import com.example.meinedemo.ui.screens.DetailScreen
-import com.example.meinedemo.ui.screens.ElectronicInfoScreen
-import com.example.meinedemo.ui.screens.HomeScreen
-import com.example.meinedemo.ui.screens.InfoScreen
-import com.example.meinedemo.ui.screens.UserScreen
+import com.example.meinedemo.ui.bands.BandInfoScreen
+import com.example.meinedemo.ui.detail.DetailScreen
+import com.example.meinedemo.ui.electronics.ElectronicInfoScreen
+import com.example.meinedemo.ui.home.HomeScreen
+import com.example.meinedemo.ui.info.InfoScreen
+import com.example.meinedemo.ui.user.UserScreen
 import com.example.meinedemo.ui.theme.MeineDemoTheme
 
 class MainActivity : ComponentActivity() {

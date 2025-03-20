@@ -1,4 +1,4 @@
-package com.example.meinedemo.ui.screens
+package com.example.meinedemo.ui.user
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

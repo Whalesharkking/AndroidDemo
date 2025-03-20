@@ -1,4 +1,4 @@
-package com.example.meinedemo.ui.screens
+package com.example.meinedemo.ui.electronics
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,12 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import coil3.compose.AsyncImage
-import com.example.meinedemo.bands.BandInfo
+import kotlin.reflect.KProperty1
 
 @Composable
-fun BandInfoScreen(
-    currentBand: BandInfo, navHostController: NavHostController
+fun ElectronicInfoScreen(
+    currentElectronic: Electronic, navHostController: NavHostController
 ) {
     Column(
         modifier = Modifier
@@ -27,22 +26,21 @@ fun BandInfoScreen(
     ) {
         Text(
             modifier = Modifier.padding(8.dp),
-            text = currentBand.name,
-            style = MaterialTheme.typography.displaySmall,
+            text = currentElectronic.name,
+            style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.primary
         )
+        val text = currentElectronic.data?.let {
+            it::class.members
+                .filterIsInstance<KProperty1<ElectronicData, *>>()
+                .mapNotNull { prop -> prop.get(it)?.let { value -> "${prop.name}: $value" } }
+                .joinToString(", ")
+        } ?: ""
         Text(
             modifier = Modifier.padding(8.dp),
-            text = "${currentBand.homeCountry}, ${currentBand.foundingYear}",
+            text = text,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.primary
-        )
-        AsyncImage(
-            modifier = Modifier
-                .padding(8.dp)
-                .align(Alignment.CenterHorizontally),
-            model = currentBand.bestOfCdCoverImageUrl,
-            contentDescription = null
         )
         Button(
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),

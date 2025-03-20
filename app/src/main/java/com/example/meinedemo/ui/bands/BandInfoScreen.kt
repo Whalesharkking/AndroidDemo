@@ -1,4 +1,4 @@
-package com.example.meinedemo.ui.screens
+package com.example.meinedemo.ui.bands
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,12 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.meinedemo.electronics.Electronic
-import com.example.meinedemo.electronics.ElectronicData
+import coil3.compose.AsyncImage
 
 @Composable
-fun ElectronicInfoScreen(
-    currentElectronic: Electronic, navHostController: NavHostController
+fun BandInfoScreen(
+    currentBand: BandInfo, navHostController: NavHostController
 ) {
     Column(
         modifier = Modifier
@@ -27,21 +26,22 @@ fun ElectronicInfoScreen(
     ) {
         Text(
             modifier = Modifier.padding(8.dp),
-            text = currentElectronic.name,
-            style = MaterialTheme.typography.titleLarge,
+            text = currentBand.name,
+            style = MaterialTheme.typography.displaySmall,
             color = MaterialTheme.colorScheme.primary
         )
-        val text = currentElectronic.data?.let {
-            it::class.members
-                .filterIsInstance<kotlin.reflect.KProperty1<ElectronicData, *>>()
-                .mapNotNull { prop -> prop.get(it)?.let { value -> "${prop.name}: $value" } }
-                .joinToString(", ")
-        } ?: ""
         Text(
             modifier = Modifier.padding(8.dp),
-            text = text,
+            text = "${currentBand.homeCountry}, ${currentBand.foundingYear}",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.primary
+        )
+        AsyncImage(
+            modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.CenterHorizontally),
+            model = currentBand.bestOfCdCoverImageUrl,
+            contentDescription = null
         )
         Button(
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),

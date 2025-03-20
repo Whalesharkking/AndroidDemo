@@ -1,16 +1,17 @@
-package com.example.meinedemo.electronics
+package com.example.meinedemo.ui.electronics
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 interface ElectronicsApiService {
     @GET("objects")
     suspend fun getElectronics(): Response<List<Electronic>>
 
     @GET("objects/{id}")
-    suspend fun getElectronicInfo(@retrofit2.http.Path("id") id: String): Response<Electronic>
+    suspend fun getElectronicInfo(@Path("id") id: String): Response<Electronic>
 }
 
 @Serializable

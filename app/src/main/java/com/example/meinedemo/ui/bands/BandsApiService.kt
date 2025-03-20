@@ -1,4 +1,4 @@
-package com.example.meinedemo.bands
+package com.example.meinedemo.ui.bands
 
 import kotlinx.serialization.Serializable
 import retrofit2.Response

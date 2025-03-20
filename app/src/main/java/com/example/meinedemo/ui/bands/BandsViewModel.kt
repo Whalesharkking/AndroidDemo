@@ -1,4 +1,4 @@
-package com.example.meinedemo.bands
+package com.example.meinedemo.ui.bands
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

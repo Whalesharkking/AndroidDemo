@@ -1,4 +1,4 @@
-package com.example.meinedemo.electronics
+package com.example.meinedemo.ui.electronics
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

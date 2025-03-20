@@ -1,4 +1,4 @@
-package com.example.meinedemo.ui.screens
+package com.example.meinedemo.ui.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,8 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.meinedemo.bands.BandsViewModel
-import com.example.meinedemo.electronics.ElectronicsViewModel
+import com.example.meinedemo.ui.bands.BandsViewModel
+import com.example.meinedemo.ui.electronics.ElectronicsViewModel
 import com.example.meinedemo.navigation.DemoApplicationScreen
 
 @Composable
