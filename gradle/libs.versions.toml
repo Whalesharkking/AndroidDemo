@@ -16,6 +16,8 @@ okHttp = "4.12.0"
 coil = "3.0.4"
 composeViewModel = "2.8.7"
 dataStorePreferences = "1.1.2"
+room = "2.6.1"
+ksp = "2.0.0-1.0.24"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -40,9 +42,13 @@ okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHtt
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 androidx_compose_viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "composeViewModel" }
-androidx-data-store-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStorePreferences"}
+androidx-data-store-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStorePreferences" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

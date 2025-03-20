@@ -3,9 +3,10 @@ package com.example.meinedemo.ui.screens
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.meinedemo.data.UserRepository
-import com.example.meinedemo.navigation.DemoApplicationScreen
+import com.example.meinedemo.model.User
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -18,8 +19,16 @@ class UserViewModel(
         .stateIn(
             viewModelScope,
             SharingStarted.Lazily,
-            DemoApplicationScreen.User("", -1, false)
+            User(id = 0, name = "", age = 1, authorized = false)
         )
+
+    val allUsers: StateFlow<List<User>> = flow {
+        userRepository.getAllUsers().collect { emit(it) }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.Lazily,
+        emptyList()
+    )
 
     fun updateUser(user: User) {
         viewModelScope.launch {
@@ -28,4 +37,11 @@ class UserViewModel(
             userRepository.setUserAuthorized(user.authorized)
         }
     }
+
+    fun addUser(user: User) {
+        viewModelScope.launch {
+            userRepository.addUser(user)
+        }
+    }
 }
+
