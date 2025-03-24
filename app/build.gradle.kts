@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.android.kotlinx.serialization)
     implementation(libs.kotlin.reflect)
     implementation(libs.androidx.data.store.preferences)
+    implementation(libs.google.accompanist)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)

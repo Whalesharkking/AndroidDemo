@@ -16,16 +16,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.meinedemo.ui.bands.BandsViewModel
-import com.example.meinedemo.ui.electronics.ElectronicsViewModel
 import com.example.meinedemo.navigation.DemoApplicationScreen
 import com.example.meinedemo.ui.bands.BandInfoScreen
+import com.example.meinedemo.ui.bands.BandsViewModel
 import com.example.meinedemo.ui.detail.DetailScreen
 import com.example.meinedemo.ui.electronics.ElectronicInfoScreen
+import com.example.meinedemo.ui.electronics.ElectronicsViewModel
 import com.example.meinedemo.ui.home.HomeScreen
 import com.example.meinedemo.ui.info.InfoScreen
-import com.example.meinedemo.ui.user.UserScreen
+import com.example.meinedemo.ui.music.MusicScreen
 import com.example.meinedemo.ui.theme.MeineDemoTheme
+import com.example.meinedemo.ui.user.UserScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,6 +106,9 @@ fun DemoNavHost(
         }
         composable(route = DemoApplicationScreen.User.name) {
             UserScreen()
+        }
+        composable(route = DemoApplicationScreen.Music.name) {
+            MusicScreen()
         }
     }
 }

@@ -17,9 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.meinedemo.navigation.DemoApplicationScreen
 import com.example.meinedemo.ui.bands.BandsViewModel
 import com.example.meinedemo.ui.electronics.ElectronicsViewModel
-import com.example.meinedemo.navigation.DemoApplicationScreen
 
 @Composable
 fun HomeScreen(
@@ -102,6 +102,11 @@ fun HomeScreen(
                     navHostController.navigate(DemoApplicationScreen.User.name)
                 }) {
                     Text(text = "To UserScreen")
+                }
+                Button(onClick = {
+                    navHostController.navigate(DemoApplicationScreen.Music.name)
+                }) {
+                    Text(text = "To MusicScreen")
                 }
             }
         }

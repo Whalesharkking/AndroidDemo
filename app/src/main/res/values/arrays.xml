@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="music_titles">
+        <item>Shape of You</item>
+        <item>Blinding Lights</item>
+        <item>Bohemian Rhapsody</item>
+        <item>Hotel California</item>
+        <item>Billie Jean</item>
+        <item>Uptown Funk</item>
+        <item>Someone Like You</item>
+        <item>Thinking Out Loud</item>
+        <item>Halo</item>
+    </string-array>
+</resources>
