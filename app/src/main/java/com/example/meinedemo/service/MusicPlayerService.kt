@@ -1,17 +1,27 @@
 package com.example.meinedemo.service
 
 import android.app.Notification
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.example.meinedemo.R
 
 
 class MusicPlayerService : Service() {
+    private val NOTIFICATION_CHANNEL_ID = "ch.hslu.mobpro.demo.channel"
+    private val NOTIFICATION_CHANNEL_NAME = "Music notifications"
+    private val NOTIFICATION_ID = 23
+
+    override fun onCreate() {
+        super.onCreate()
+        createNotificationChannelIfNeeded()
+    }
 //    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 //        val NOTIFICATION_ID = 23
 //
@@ -42,8 +52,24 @@ class MusicPlayerService : Service() {
 //        return START_STICKY
 //    }
 
+
+    private fun createNotificationChannelIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                NOTIFICATION_CHANNEL_ID,
+                NOTIFICATION_CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "Benachrichtigungen für Musiksteuerung"
+            }
+
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
     private fun createNotification(musicTitle: String): Notification {
-        return NotificationCompat.Builder(this, "ch.hslu.mobpro.demo.channel")
+        return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle("HSLU Music Player")
             .setContentText(musicTitle)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -60,7 +86,6 @@ class MusicPlayerService : Service() {
         val next = titles.random()
         val notification = createNotification(musicTitle = next)
 
-        val NOTIFICATION_ID = 23
         val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager.notify(NOTIFICATION_ID, notification)
 
@@ -73,16 +98,12 @@ class MusicPlayerService : Service() {
     }
 
     private val musicPlayerAPI = MusicPlayerApiImpl()
-    override fun onBind(intent: Intent?): IBinder? {
-        return musicPlayerAPI
-    }
+    override fun onBind(intent: Intent?): IBinder = musicPlayerAPI
 
     inner class MusicPlayerApiImpl : MusicPlayerApi, Binder() {
-
         override fun playNextSong(): String {
             return this@MusicPlayerService.playNextSong()
         }
     }
-
 }
 
