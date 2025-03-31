@@ -19,6 +19,7 @@ import androidx.navigation.navArgument
 import com.example.meinedemo.navigation.DemoApplicationScreen
 import com.example.meinedemo.ui.bands.BandInfoScreen
 import com.example.meinedemo.ui.bands.BandsViewModel
+import com.example.meinedemo.ui.components.BroadcastWidget
 import com.example.meinedemo.ui.detail.DetailScreen
 import com.example.meinedemo.ui.electronics.ElectronicInfoScreen
 import com.example.meinedemo.ui.electronics.ElectronicsViewModel
@@ -109,6 +110,9 @@ fun DemoNavHost(
         }
         composable(route = DemoApplicationScreen.Music.name) {
             MusicScreen()
+        }
+        composable(route = DemoApplicationScreen.Components.name) {
+            BroadcastWidget()
         }
     }
 }

@@ -7,5 +7,7 @@ enum class DemoApplicationScreen {
     BandInfo,
     ElectronicInfo,
     User,
-    Music;
+    Music,
+    Components
+    ;
 }
