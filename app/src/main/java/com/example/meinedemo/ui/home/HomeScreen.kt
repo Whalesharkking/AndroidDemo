@@ -108,6 +108,11 @@ fun HomeScreen(
                 }) {
                     Text(text = "To MusicScreen")
                 }
+                Button(onClick = {
+                    navHostController.navigate(DemoApplicationScreen.Components.name)
+                }) {
+                    Text(text = "To Components")
+                }
             }
         }
     }
