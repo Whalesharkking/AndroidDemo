@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
-import android.provider.ContactsContract
-import android.provider.Telephony
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +16,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -29,7 +26,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.RECEIVER_NOT_EXPORTED
 import androidx.lifecycle.compose.LifecycleStartEffect
 import com.example.meinedemo.components.BroadcastActions
+import com.example.meinedemo.components.ContactLoader
 import com.example.meinedemo.components.MyLocalBroadcastReceiver
+import com.example.meinedemo.components.SmsLoader
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -56,210 +55,136 @@ fun BroadcastWidget() {
         }
     }
 
-    // Box, um alles auf dem Bildschirm zu zentrieren
     Box(
         modifier = Modifier
-            .fillMaxSize(), // nimmt den ganzen verfügbaren Platz ein
-        contentAlignment = Alignment.Center // zentriert den Inhalt
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = "Broadcasts",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
+            HeadLine("Broadcasts")
 
-            Button(
-                onClick = {
-                    val intent = Intent(BroadcastActions.MANIFEST_ACTION).apply {
-                        setPackage(context.packageName)
-                    }
-                    context.sendBroadcast(intent)
-                },
-                modifier = Modifier.padding(vertical = 8.dp)
-            ) {
-                Text("Send Manifest Broadcast")
-            }
+            SendBroadcast(context, BroadcastActions.MANIFEST_ACTION, "Manifest")
+            SendBroadcast(context, BroadcastActions.LOCAL_ACTION, "Local")
 
-            Button(
-                onClick = {
-                    val intent = Intent(BroadcastActions.LOCAL_ACTION).apply {
-                        setPackage(context.packageName)
-                    }
-                    context.sendBroadcast(intent)
-                },
-                modifier = Modifier.padding(vertical = 8.dp)
-            ) {
-                Text("Send Local Broadcast")
-            }
-            Text(
-                text = "Content Provider",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
-            SmsWidget(context)
-            ContactWidget(context)
+            HeadLine("Content Provider")
+
+            SmsWidget()
+            ContactWidget()
         }
     }
 
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun SmsWidget(context: Context) {
+fun SmsWidget() {
+    LoadWidget(
+        permission = android.Manifest.permission.READ_SMS,
+        buttonText = "Read SMS",
+        loadData = { SmsLoader.readSms(it) }
+    )
+}
 
-    val permissionState =
-        rememberPermissionState(android.Manifest.permission.READ_SMS)
-    val messages = remember { mutableStateListOf<String>() }
-
-    LaunchedEffect(Unit) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !permissionState.status.isGranted) {
-            permissionState.launchPermissionRequest()
-        }
-    }
-
-    Button(
-        onClick = {
-            if (permissionState.status.isGranted) {
-                val loadedMessages = readSms(context)
-                messages.clear()
-                messages.addAll(loadedMessages)
-            }
-        },
-        modifier = Modifier.padding(vertical = 8.dp)
-    ) {
-        Text("Read SMS")
-    }
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(250.dp) // <--- fixe Höhe
-            .padding(top = 8.dp)
-    ) {
-        items(messages) { message ->
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            )
-        }
-    }
-
+@Composable
+fun ContactWidget() {
+    LoadWidget(
+        permission = android.Manifest.permission.READ_CONTACTS,
+        buttonText = "Read Contacts",
+        loadData = { ContactLoader.readContacts(it) }
+    )
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun ContactWidget(context: Context) {
-
-    val permissionState =
-        rememberPermissionState(android.Manifest.permission.READ_CONTACTS)
-    val contacts = remember { mutableStateListOf<String>() }
-
-    LaunchedEffect(Unit) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !permissionState.status.isGranted) {
-            permissionState.launchPermissionRequest()
-        }
-    }
+fun LoadWidget(
+    permission: String,
+    buttonText: String,
+    loadData: (Context) -> List<DisplayEntry>
+) {
+    val context = LocalContext.current
+    val permissionState = rememberPermissionState(permission)
+    val entries = remember { mutableStateListOf<DisplayEntry>() }
 
     Button(
+        modifier = Modifier.padding(vertical = 8.dp),
         onClick = {
-            if (permissionState.status.isGranted) {
-                val loadedContacts = readContacts(context)
-                contacts.clear()
-                contacts.addAll(loadedContacts)
+            if (checkSDKVersion() && !permissionState.status.isGranted) {
+                permissionState.launchPermissionRequest()
             }
+            if (permissionState.status.isGranted) {
+                val loaded = loadData(context)
+                entries.clear()
+                entries.addAll(loaded)
+            }
+        }
+    ) {
+        Text(buttonText)
+    }
+
+    LabelValueList(entries)
+}
+
+@Composable
+private fun HeadLine(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.headlineMedium,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(bottom = 24.dp)
+    )
+}
+
+@Composable
+private fun SendBroadcast(context: Context, actionName: String, broadcastName: String) {
+    Button(
+        onClick = {
+            val intent = Intent(actionName).apply {
+                setPackage(context.packageName)
+            }
+            context.sendBroadcast(intent)
         },
         modifier = Modifier.padding(vertical = 8.dp)
     ) {
-        Text("Read Contacts")
+        Text("Send %s Broadcast".format(broadcastName))
     }
+}
+
+
+@Composable
+fun LabelValueList(entries: List<DisplayEntry>, modifier: Modifier = Modifier) {
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .height(250.dp) // <--- fixe Höhe
+            .height(250.dp)
             .padding(top = 8.dp)
     ) {
-        items(contacts) { contact ->
-            val parts = contact.split(":").map { it.trim() }
-            val name = parts.getOrNull(0) ?: "Unbekannt"
-            val number = parts.getOrNull(1) ?: "Keine Nummer"
-
+        items(entries) { entry ->
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 Text(
-                    text = name,
-                    style = MaterialTheme.typography.titleSmall,
+                    text = entry.label,
+                    style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
                 Text(
-                    text = number,
-                    style = MaterialTheme.typography.bodySmall,
+                    text = entry.value,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
     }
-
-
 }
 
-@Composable
-fun LazyColumn(context: Context) {
 
-}
+private fun checkSDKVersion(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 
-private fun readSms(context: Context): List<String> {
-    val smsList = mutableListOf<String>()
-    context.contentResolver.query(
-        Telephony.Sms.Inbox.CONTENT_URI,
-        arrayOf(Telephony.Sms.Inbox._ID, Telephony.Sms.Inbox.BODY), // projection
-        null,   // selection
-        null,   // selection args
-        null    // sort order
-    )?.let { cursor ->
-        val bodyIndex = cursor.getColumnIndex(Telephony.Sms.BODY)
 
-        while (cursor.moveToNext()) {
-            val body = cursor.getString(bodyIndex)
-            smsList.add(body)
-        }
-
-        cursor.close()
-    }
-    return smsList
-}
-
-private fun readContacts(context: Context): List<String> {
-    val contactList = mutableListOf<String>()
-    context.contentResolver.query(
-        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-        arrayOf(
-            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-            ContactsContract.CommonDataKinds.Phone.NUMBER
-        ), // projection
-        null,   // selection
-        null,   // selection args
-        null    // sort order
-    )?.let { cursor ->
-        val nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
-        val numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-
-        while (cursor.moveToNext()) {
-            val name = cursor.getString(nameIndex)
-            val number = cursor.getString(numberIndex)
-            contactList.add("$name: $number")
-        }
-
-        cursor.close()
-    }
-    return contactList
-}
+data class DisplayEntry(
+    val label: String,
+    val value: String
+)
