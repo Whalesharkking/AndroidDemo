@@ -100,7 +100,7 @@ fun ContactWidget() {
 fun LoadWidget(
     permission: String,
     buttonText: String,
-    loadData: (Context) -> List<DisplayEntry>
+    loadData: (Context) -> List<DisplayEntry> //Spezifische Methode um Daten zu laden
 ) {
     val context = LocalContext.current
     val permissionState = rememberPermissionState(permission)

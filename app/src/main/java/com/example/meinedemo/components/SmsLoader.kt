@@ -5,6 +5,7 @@ import android.provider.Telephony
 import com.example.meinedemo.ui.components.DisplayEntry
 
 object SmsLoader {
+    // Nur innerhalb des Moduls sichtbar
     internal fun readSms(context: Context): List<DisplayEntry> {
         val smsList = mutableListOf<DisplayEntry>()
         context.contentResolver.query(
@@ -16,7 +17,7 @@ object SmsLoader {
             null,
             null,
             null
-        )?.let { cursor ->
+        )?.let { cursor -> //Null-Safety falls kein SMS vorhanden
             val bodyIndex = cursor.getColumnIndex(Telephony.Sms.BODY)
             val addressIndex = cursor.getColumnIndex(Telephony.Sms.ADDRESS)
 
